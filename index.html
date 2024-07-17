@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="style/main.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="gradient-text">Weather app</h1>
+        <div class="search-container">
+            <div class="search">
+                <input type="text" id="city" placeholder="Enter city name">
+                <button class="search-button" id="getWeather">Get Weather</button>
+            </div>
+        </div>
+
+        <div class="main-weather-info" id="mainWeatherInfo">
+            <img src="./assets/sun.png" alt="">
+            <div class="weather-info">
+                <h2>Location</h2>
+                <p class="temperature gradient-text">- °C</p>
+                <p>Humidity: - %</p>
+                <p>Wind Speed: - kph</p>
+                <p>Weather: -</p>
+            </div>
+        </div>
+
+        <div class="extra-weather-info" id="extraWeatherInfo">
+            <div class="sun-info sunrise">
+                <img src="assets/sunrise.png" alt="">
+                <p>-</p>
+            </div>
+            <div class="sun-info sunset">
+                <img src="assets/sunset.png" alt="">
+                <p>-</p>
+            </div>
+            
+        </div>
+
+        
+        <div class="weather-hourly" id="weatherHourly">
+            
+        </div>
+        <div class="powered-by">
+            Powered by <a href="https://www.weatherapi.com/" title="Free Weather API">WeatherAPI.com</a>
+        </div>
+    </div>
+    
+
+    <!-- Scripts -->
+    <script src="src/icons.js"></script>
+    <script src="src/main.js"></script>
+</body>
+</html>
