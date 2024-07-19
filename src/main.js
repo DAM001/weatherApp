@@ -27,6 +27,11 @@ function loadData(url) {
             console.log(data);
 
             // Main weather info
+            const currentTime = new Date().getHours();
+            const sunriseTime = convertTo24Hour(data.forecast.forecastday[0].astro.sunrise);
+            const sunsetTime = convertTo24Hour(data.forecast.forecastday[0].astro.sunset);
+            const isCurrentDay = currentTime > sunriseTime && currentTime < sunsetTime;
+
             const weatherInfo = `
                 <h2>${data.location.name}</h2>
                 <p class="temperature gradient-text">${data.current.temp_c} °C</p>
@@ -35,8 +40,8 @@ function loadData(url) {
                 <p>Weather: ${data.current.condition.text}</p>
             `;
             document.getElementById('mainWeatherInfo').querySelector('.weather-info').innerHTML = weatherInfo;
-            document.getElementById('mainWeatherInfo').querySelector("img").src = "./assets/" + getWeatherIcon(data.current.condition.code);
-        
+            document.getElementById('mainWeatherInfo').querySelector("img").src = "./assets/" + getWeatherIcon(data.current.condition.code, isCurrentDay);
+
             // Extra weather info
             const extraWeatherInfoContainer = document.getElementById('extraWeatherInfo');
             extraWeatherInfoContainer.querySelector('.sunrise').querySelector('p').innerHTML = data.forecast.forecastday[0].astro.sunrise;
@@ -45,21 +50,26 @@ function loadData(url) {
             // Hourly
             const weatherHourly = document.getElementById("weatherHourly");
             weatherHourly.innerHTML = "";
-            
+
             for (let i = 0; i < 3; i++) {
                 let currentHour = new Date().getHours();
-                if (i > 0) currentHour = 0;
                 const hourlyData = data.forecast.forecastday[i].hour;
+                const sunriseTime = convertTo24Hour(data.forecast.forecastday[i].astro.sunrise);
+                const sunsetTime = convertTo24Hour(data.forecast.forecastday[i].astro.sunset);
 
                 let innerHTML = "<div class='hour-day-container'>";
                 if (i == 0) innerHTML += "<h2>Today:</h2>";
                 if (i == 1) innerHTML += "<h2>Tomorrow:</h2>";
                 if (i == 2) innerHTML += "<h2>After tomorrow:</h2>";
-                for (let j = currentHour; j < 24; j++) {
+
+                for (let j = 0; j < hourlyData.length; j++) {
+                    if (i === 0 && j < currentHour) continue; // Skip past hours of today
+                    const isHourDay = j > sunriseTime && j < sunsetTime;
+
                     const weatherInfoHour = `
                         <div class="hour-info">
-                            <p class="hour-display">${j + 1}:00</p>
-                            <img class="icon" src="./assets/${getWeatherIcon(hourlyData[j].condition.code)}" alt="">
+                            <p class="hour-display">${j}:00</p>
+                            <img class="icon" src="./assets/${getWeatherIcon(hourlyData[j].condition.code, isHourDay)}" alt="">
                             
                             <div>
                                 <p class="temperature gradient-text">${hourlyData[j].temp_c} °C</p>
@@ -70,10 +80,11 @@ function loadData(url) {
                     `;
                     innerHTML += weatherInfoHour;
                 }
+
                 innerHTML += "</div>";
                 weatherHourly.innerHTML += innerHTML;
             }
-        
+
         } else {
             document.getElementById('weatherInfo').innerHTML = `<p>No data available</p>`;
         }
@@ -82,4 +93,16 @@ function loadData(url) {
         console.error('Error:', error);
         document.getElementById('weatherInfo').innerHTML = `<p>Error fetching data</p>`;
     });
+}
+
+function convertTo24Hour(time) {
+    const [hour, minutePart] = time.split(':');
+    const period = minutePart.slice(-2);
+    let hour24 = parseInt(hour, 10);
+
+    if (period === 'PM' && hour24 !== 12) hour24 += 12;
+    if (period === 'AM' && hour24 === 12) hour24 = 0;
+
+    console.log(hour24);
+    return hour24;
 }

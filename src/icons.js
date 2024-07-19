@@ -1,11 +1,11 @@
 const weatherIconsData = {
     "clear": {
         "code": [1000],
-        "image": "sun.png"
+        "image": "clear"
     },
     "cloudy": {
         "code": [1003, 1006, 1009],
-        "image": "cloudy.png"
+        "image": "cloudy"
     },
     "fog": {
         "code": [1030, 1135, 1147],
@@ -13,7 +13,7 @@ const weatherIconsData = {
     },
     "lightRain": {
         "code": [1063, 1150, 1153, 1180, 1183, 1240, 1186, 1189, 1243, 1273],
-        "image": "rainy.png"
+        "image": "rainy"
     },
     "heavyRain": {
         "code": [1192, 1195, 1246, 1276],
@@ -25,7 +25,7 @@ const weatherIconsData = {
     },
     "snow": {
         "code": [1066, 1210, 1213, 1255, 1279, 1216, 1219, 1258, 1282, 1222, 1225],
-        "image": "snowy.png"
+        "image": "snowy"
     },
     "sleet": {
         "code": [1069, 1204, 1207, 1249, 1252],
@@ -37,13 +37,18 @@ const weatherIconsData = {
     },
 }
 
-function getWeatherIcon(code) {
-    let icon = "unknown.png";
+function getWeatherIcon(code, isDay) {
+    let icon = "wind.png";
 
     for (let category in weatherIconsData) {
         if (weatherIconsData.hasOwnProperty(category)) {
             if (weatherIconsData[category].code.includes(code)) {
                 icon = weatherIconsData[category].image;
+
+                if (!icon.includes(".png")) {
+                    icon += isDay ? "_day.png" : "_night.png";
+                }
+
                 break;
             }
         }
