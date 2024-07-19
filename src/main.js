@@ -24,7 +24,7 @@ function loadData(url) {
     .then(response => response.json())
     .then(data => {
         if (data) {
-            console.log(data);
+            //console.log(data);
 
             // Main weather info
             const currentTime = new Date().getHours();
@@ -46,6 +46,28 @@ function loadData(url) {
             const extraWeatherInfoContainer = document.getElementById('extraWeatherInfo');
             extraWeatherInfoContainer.querySelector('.sunrise').querySelector('p').innerHTML = data.forecast.forecastday[0].astro.sunrise;
             extraWeatherInfoContainer.querySelector('.sunset').querySelector('p').innerHTML = data.forecast.forecastday[0].astro.sunset;
+
+            // Daily summary
+            const dailySummary = document.getElementById('dailySummary');
+            dailySummary.innerHTML = "";
+            for (let i = 0; i < 3; i++) {
+                const dayData = data.forecast.forecastday[i].day;
+                let dayName = "Today";
+                if (i == 1) dayName = "Tomorrow";
+                if (i == 2) dayName = "After tomorrow"
+
+                const dailyInfo = `
+                        <div class="daily-summary-card">
+                            <p>${dayName}</p>
+                            <img src="./assets/${getWeatherIcon(dayData.condition.code, true)}" alt="">
+                            <div class="text-folder">
+                                <p>${dayData.maxtemp_c}</p>
+                                <p class="faded">/${dayData.mintemp_c} °C</p>
+                            </div>
+                        </div>
+                    `;
+                    dailySummary.innerHTML += dailyInfo;
+            }
 
             // Hourly
             const weatherHourly = document.getElementById("weatherHourly");
@@ -103,6 +125,5 @@ function convertTo24Hour(time) {
     if (period === 'PM' && hour24 !== 12) hour24 += 12;
     if (period === 'AM' && hour24 === 12) hour24 = 0;
 
-    console.log(hour24);
     return hour24;
 }

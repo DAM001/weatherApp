@@ -4,7 +4,7 @@
     --background-color: #303030;
     --background-hover-color: #494949;
     --font-color: #e3e3e3;
-    --font-secondary-color: #cacaca;
+    --font-secondary-color: #757575;
     --theme-color: #60a2d7;
     --theme-secondary-color: #fdd020;
     --border-color: #828282;
@@ -153,7 +153,41 @@ input {
     }
 }
 
+.daily-summary {
+    display: flex;
+    margin: 0 15px 10px;
+}
 
+.daily-summary-card {
+    padding: 10px;
+    margin: 0 5px;
+    width: 100%;
+    flex: 1;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    height: 110px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+    p {
+        text-wrap: nowrap;
+    }
+
+    img {
+        margin: auto;
+        width: 70px;
+    }
+
+    .text-folder {
+        display: flex;
+        justify-content: center;
+    }
+
+    .faded {
+        color: var(--font-secondary-color);
+    }
+}
 
 
 
